@@ -25,14 +25,16 @@ def load_config(path="configs/default.yaml"):
     with open(path) as f:
         return yaml.safe_load(f)
 
-def run_simulation(config):
+def run_simulation(config, head_choice=None):
     log.info("Starting MULTIMODAL FL SIMULATION")
     log.info(f"  Clients: {config['fl']['num_clients']} (CT + MRI)")
     log.info(f"  Rounds: {config['fl']['rounds']}")
     log.info(f"  Local epochs: {config['fl']['local_epochs']}")
 
-    # Start server
+    # Start server (pass head choice so server includes it in filenames)
     server_cmd = [sys.executable, "-m", "src.main", "--server"]
+    if head_choice:
+        server_cmd += ["--head", head_choice]
     server_proc = subprocess.Popen(server_cmd)
     time.sleep(5)
 
@@ -45,6 +47,9 @@ def run_simulation(config):
             "--client-id", str(i),
             "--modality", mod
         ]
+        # include head option so spawned clients use the same head choice
+        if head_choice:
+            cmd += ["--head", head_choice]
         proc = subprocess.Popen(cmd)
         client_procs.append(proc)
         time.sleep(1)
@@ -63,14 +68,20 @@ def main():
     parser.add_argument("--client-id", type=int)
     parser.add_argument("--modality", choices=["ct", "mri"])
     parser.add_argument("--simulate", action="store_true")
+    parser.add_argument("--head", choices=["random_forest", "decision_tree", "sklearn_mlp", "torch_mlp"], help="Which local classifier head to use")
     args = parser.parse_args()
 
     config = load_config(args.config)
 
     os.environ["PYTHONWARNINGS"] = "ignore::DeprecationWarning"
 
+    head_choice = args.head or config.get("client", {}).get("local_classifier")
+    # Ensure config reflects the head choice so server and other code can read it
+    if "client" not in config:
+        config["client"] = {}
+    config["client"]["local_classifier"] = head_choice
     if args.simulate:
-        run_simulation(config)
+        run_simulation(config, head_choice=head_choice)
     elif args.server:
         strategy = get_strategy(config)
         log.info(f"Server starting | Rounds: {config['fl']['rounds']}")
@@ -82,7 +93,7 @@ def main():
     else:
         if args.client_id is None or args.modality is None:
             parser.error("--client-id and --modality required")
-        client = FLClient(args.client_id, args.modality, config)
+        client = FLClient(args.client_id, args.modality, config, head_name=head_choice)
         fl.client.start_client(
             server_address="localhost:8090",
             client=client.to_client()

@@ -17,7 +17,7 @@ class MultimodalFLModel(nn.Module):
     def forward(self, x):
         return self.body(x)
 
-    def set_local_head(self, head: RandomForestHead):
+    def set_local_head(self, head):
         self.local_head = head
 
     def get_gradient_params(self):

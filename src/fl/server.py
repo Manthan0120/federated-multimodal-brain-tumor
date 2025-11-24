@@ -15,9 +15,14 @@ def get_strategy(config):
     # Prepare output directory for learning curves
     out_dir = config.get("learning_curve_dir", os.path.join("outputs", "learning_curves"))
     os.makedirs(out_dir, exist_ok=True)
-    # Use a timestamped filename so multiple runs don't overwrite each other
+    # Use a timestamped filename and include which local classifier/head was used
     ts = int(time.time())
-    outfile = os.path.join(out_dir, f"val_accuracy_{ts}.json")
+    head_name = config.get("client", {}).get("local_classifier", "unknown")
+    # sanitize head_name for filenames
+    if head_name is None:
+        head_name = "unknown"
+    safe_head = str(head_name).lower().replace(" ", "_")
+    outfile = os.path.join(out_dir, f"val_accuracy_{safe_head}_{ts}.json")
 
     # Internal list and counter to track per-round aggregated accuracy and per-client metrics
     aggregated_list: List[dict] = []

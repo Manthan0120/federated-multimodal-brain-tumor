@@ -7,13 +7,13 @@ import flwr as fl
 import numpy as np
 from typing import List
 
-from src.models.local_heads import RandomForestHead
+from src.models.local_heads import create_head
 from src.data.preprocess import create_dataloaders
 from src.models import get_model
 
 
 class FLClient(fl.client.NumPyClient):
-    def __init__(self, client_id: int, modality: str, config):
+    def __init__(self, client_id: int, modality: str, config, head_name: str = None):
         self.client_id = client_id
         self.modality = modality.upper()
         self.config = config
@@ -30,10 +30,15 @@ class FLClient(fl.client.NumPyClient):
         self.model = get_model(config).to(self.device)
         self.criterion = nn.CrossEntropyLoss()
 
-        rf_cfg = config["client"]
-        self.local_head = RandomForestHead(
-            n_estimators=rf_cfg["rf_n_estimators"],
-            max_depth=rf_cfg["rf_max_depth"]
+        client_cfg = config["client"]
+        # choose head from CLI or config
+        head_choice = (head_name or client_cfg.get("local_classifier", "random_forest"))
+        # create_head handles selecting correct class and reading cfg
+        self.local_head = create_head(
+            head_choice,
+            in_features=self.model.feature_dim,
+            cfg=client_cfg,
+            device=self.device,
         )
         self.model.set_local_head(self.local_head)
 
