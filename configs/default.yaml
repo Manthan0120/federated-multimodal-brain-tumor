@@ -1,25 +1,42 @@
+# default.yaml — FULLY COMPATIBLE WITH YOUR local_heads.py
 model:
+  pretrained: true
+  freeze_body: true
   backbone: mobilenet_v3_small
   feature_dim: 576
-  pretrained: true
-  freeze_body: false
 
 fl:
   rounds: 20
-  num_clients: 4
-  fraction_fit: 1.0
-  local_epochs: 3
-  batch_size: 16
-  # Directory where learning-curve outputs will be saved. Can be relative to repo root
-  # or an absolute path. The server will create this directory if it does not exist.
+  num_clients: 10
+  fraction_fit: 0.5
+  fraction_evaluate: 1.0
+  local_epochs: 1
   learning_curve_dir: outputs/learning_curves
-  # Which formats to save: any combination of 'json', 'csv', 'png'
-  learning_curve_formats: [json, csv, png]
 
+# ──────────────────────────────── LOCAL HEAD CONFIG ────────────────────────────────
 client:
-  local_classifier: random_forest
-  rf_n_estimators: 100
+  # ←←← CHANGE THIS ONE LINE TO SWITCH HEAD
+  local_classifier: mlp           # Options: random_forest | mlp | decision_tree | linear
+
+  # ───── Random Forest settings (used when local_classifier: random_forest)
+  rf_n_estimators: 200
   rf_max_depth: null
+  rf_max_samples: 0.6
+
+  # ───── MLP settings (used when local_classifier: mlp)
+  mlp_hidden: [256, 128]          # List → will be converted to tuple (256, 128)
+  mlp_layers: 2                   # Alternative: just set mlp_hidden as above
+  mlp_dropout: 0.3
+  mlp_max_iter: 400
+  mlp_early_stopping: true
+  mlp_learning_rate: 0.001
+
+  # ───── Decision Tree (rarely used)
+  dt_max_depth: 12
+
+  # ───── Linear / Logistic Regression (add later if needed)
+  # linear_C: 1.0
 
 data:
-  modality_per_client: true
+  dirichlet_alpha: 0.2
+  iid: false

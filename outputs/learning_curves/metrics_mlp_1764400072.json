@@ -1,0 +1,122 @@
+[
+  {
+    "round": 1,
+    "train_accuracy": 0.9368,
+    "val_accuracy": 0.908,
+    "n_clients": 10
+  },
+  {
+    "round": 2,
+    "train_accuracy": 0.9502,
+    "val_accuracy": 0.924,
+    "n_clients": 10
+  },
+  {
+    "round": 3,
+    "train_accuracy": 0.9561,
+    "val_accuracy": 0.908,
+    "n_clients": 10
+  },
+  {
+    "round": 4,
+    "train_accuracy": 0.9486,
+    "val_accuracy": 0.92,
+    "n_clients": 10
+  },
+  {
+    "round": 5,
+    "train_accuracy": 0.9595,
+    "val_accuracy": 0.92,
+    "n_clients": 10
+  },
+  {
+    "round": 6,
+    "train_accuracy": 0.9392,
+    "val_accuracy": 0.92,
+    "n_clients": 10
+  },
+  {
+    "round": 7,
+    "train_accuracy": 0.9628,
+    "val_accuracy": 0.932,
+    "n_clients": 10
+  },
+  {
+    "round": 8,
+    "train_accuracy": 0.9578,
+    "val_accuracy": 0.928,
+    "n_clients": 10
+  },
+  {
+    "round": 9,
+    "train_accuracy": 0.9349,
+    "val_accuracy": 0.912,
+    "n_clients": 10
+  },
+  {
+    "round": 10,
+    "train_accuracy": 0.9494,
+    "val_accuracy": 0.94,
+    "n_clients": 10
+  },
+  {
+    "round": 11,
+    "train_accuracy": 0.9468,
+    "val_accuracy": 0.92,
+    "n_clients": 10
+  },
+  {
+    "round": 12,
+    "train_accuracy": 0.9315,
+    "val_accuracy": 0.924,
+    "n_clients": 10
+  },
+  {
+    "round": 13,
+    "train_accuracy": 0.95,
+    "val_accuracy": 0.924,
+    "n_clients": 10
+  },
+  {
+    "round": 14,
+    "train_accuracy": 0.929,
+    "val_accuracy": 0.92,
+    "n_clients": 10
+  },
+  {
+    "round": 15,
+    "train_accuracy": 0.9637,
+    "val_accuracy": 0.936,
+    "n_clients": 10
+  },
+  {
+    "round": 16,
+    "train_accuracy": 0.9511,
+    "val_accuracy": 0.912,
+    "n_clients": 10
+  },
+  {
+    "round": 17,
+    "train_accuracy": 0.946,
+    "val_accuracy": 0.928,
+    "n_clients": 10
+  },
+  {
+    "round": 18,
+    "train_accuracy": 0.9468,
+    "val_accuracy": 0.916,
+    "n_clients": 10
+  },
+  {
+    "round": 19,
+    "train_accuracy": 0.9654,
+    "val_accuracy": 0.948,
+    "n_clients": 10
+  },
+  {
+    "round": 20,
+    "train_accuracy": 0.9519,
+    "val_accuracy": 0.912,
+    "n_clients": 10
+  }
+]

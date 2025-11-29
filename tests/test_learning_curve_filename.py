@@ -1,7 +1,7 @@
 import os
 import time
 
-from src.fl.server import get_strategy
+from src.server.server import get_strategy
 
 
 def test_learning_curve_filename_contains_head(tmp_path):
